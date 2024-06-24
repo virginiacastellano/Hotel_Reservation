@@ -26,13 +26,13 @@ class Testimonial(models.Model):
 
 class Reservation(models.Model):
     Name = models.CharField(max_length=20)
-    Phone = models.IntegerField(default=0)
+    Phone = models.BigIntegerField(default=0)
     Email = models.EmailField(max_length=40)
     Date_Check_In = models.DateField()
     Date_Check_Out = models.DateField()
-    Adulte = models.IntegerField(default=0)
+    Adulte = models.IntegerField()
     Children = models.IntegerField(default=0)
-    Note = models.TextField()
+    Note = models.TextField(blank=True, null=True)  # Notes can be optional
 
     def __str__(self):
         return self.Name
@@ -41,8 +41,3 @@ class ReservationForm(forms.ModelForm):
     class Meta:
         model = Reservation
         fields = ['Name', 'Phone', 'Email', 'Date_Check_In', 'Date_Check_Out', 'Adulte', 'Children', 'Note']
-
-    def __init__(self, *args, **kwargs):
-        super(ReservationForm, self).__init__(*args, **kwargs)
-        self.fields['Name'].required = False  # Set the Name field to be optional
-        self.fields['Name'].initial = ''  # Set the default value for the Name field
