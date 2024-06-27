@@ -6,7 +6,7 @@ from . import views
 urlpatterns = [
     path('', index, name='index'),
     path('reservation', reservation, name='reservation'),
-    path('reservation/confirmation/', views.reservation_confirmation, name='reservation_confirmation'),    
+    path('reservation/confirmation/<int:reservation_id>/', views.reservation_confirmation, name='reservation_confirmation'),
     path('check_availability/', views.check_availability, name='check_availability'),
 
     #path('Contact/', contact, name='Contact'),

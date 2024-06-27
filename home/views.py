@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Chambre, Catalogue, Testimonial, ReservationForm, Reservation
 
 
@@ -22,7 +22,8 @@ def reservation(request):
         form = ReservationForm(request.POST)
         if form.is_valid():
             reservation = form.save()
-            return redirect("reservation_confirmation")
+            # Pasar el ID de la reserva a la vista de confirmación
+            return redirect('reservation_confirmation', reservation_id=reservation.id)
         else:
             print("Formulario inválido")
             print(form.errors)
@@ -30,8 +31,19 @@ def reservation(request):
         form = ReservationForm()
     return render(request, "reservation.html", {"form": form})
 
-def reservation_confirmation(request):
-    return render(request, "reservation_confirmation.html")
+def reservation_confirmation(request, reservation_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id)
+    context = {
+        'reservation_number': reservation.id,
+        'check_in_date': reservation.Date_Check_In,
+        'check_out_date': reservation.Date_Check_Out,
+        'adults': reservation.Adulte,
+        'children': reservation.Children,
+        'name': reservation.Name,
+        'phone': reservation.Phone,
+        'email': reservation.Email,
+    }
+    return render(request, "reservation_confirmation.html", context)
 
 def check_availability(request):
     if request.method == "POST":
